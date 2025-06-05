@@ -68,12 +68,13 @@ class PrestamoController extends Controller
                 return response()->json(['error' => 'El socio no existe'], 400);
             }
 
-            // verificar si tiene multa pendiente
-            $multa = Multa::where('id_usuario', $request->id_socio)->where('pagada', 1)->first();
-            if ($multa) {
-                return response()->json(['error' => 'Tienes multas pendientes'], 400);
-            }
+            $multa = Multa::where('id_usuario', $request->id_socio)
+                ->where('pagada', false) // o 0, según el tipo de dato
+                ->first();
 
+            if ($multa) {
+                return response()->json(['error' => 'Tienes multas pendientes y no puedes reservar.'], 403);
+            }
             DB::beginTransaction();
 
             // crear prestamo
