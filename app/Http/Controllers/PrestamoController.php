@@ -69,7 +69,7 @@ class PrestamoController extends Controller
             }
 
             // verificar si tiene multa pendiente
-            $multa = Multa::where('id_usuario', $request->id_socio)->where('pagada', false)->first();
+            $multa = Multa::where('id_usuario', $request->id_socio)->where('pagada', 1)->first();
             if ($multa) {
                 return response()->json(['error' => 'Tienes multas pendientes'], 400);
             }
